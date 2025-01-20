@@ -9,14 +9,10 @@ jobs:
   deploy:
     runs-on: self-hosted
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-        with:
-          ref: production
-
       - name: Setup Environment
         run: |
-          cd /home/ubuntu/demo-production
+          DEPLOY_WORKSPACE="/home/ubuntu/demo-production"
+          cd $DEPLOY_WORKSPACE
 
           # Kiểm tra và tạo folder releases nếu chưa tồn tại
           if [ ! -d "releases" ]; then
@@ -39,26 +35,27 @@ jobs:
 
           # Tạo folder mới với tên version mới
           mkdir $NEW_VERSION
-          cd $NEW_VERSION
 
-          # Clone branch production vào folder mới
-          git clone --branch production git@github.com:haiquang9994/workflows-demo.git .
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          ref: production
+          path: $DEPLOY_WORKSPACE/releases/$NEW_VERSION
 
-          # Cài đặt các dependency của PHP bằng composer
+      - name: Setup Application
+        run: |
+          cd $DEPLOY_WORKSPACE/$NEW_VERSION
           composer install
-
-          # Chuyển đến folder node và cài đặt các dependency Node.js
           cd node
           yarn
           cd ..
 
           # Copy shared
-          ln -s ../shared/env .env
-          ln -s ../shared/console.hosts .console.hosts
+          ln -s $DEPLOY_WORKSPACE/shared/env .env
+          ln -s $DEPLOY_WORKSPACE/shared/console.hosts .console.hosts
 
           # Quay lại thư mục cha để tạo hoặc cập nhật link symbolic 'current'
-          cd ..
-          cd ..
+          cd $DEPLOY_WORKSPACE
           ln -sfn releases/$NEW_VERSION current
 
           # Quay lại folder releases để xóa các phiên bản cũ
