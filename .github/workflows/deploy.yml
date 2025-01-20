@@ -18,11 +18,22 @@ jobs:
         run: |
           cd /home/ubuntu/demo-production
 
+          # Kiểm tra và tạo folder releases nếu chưa tồn tại
+          if [ ! -d "releases" ]; then
+            mkdir releases
+          fi
+
           # Chuyển đến folder releases
           cd releases
 
-          # Lấy folder version hiện tại (folder có số lớn nhất)
-          CURRENT_VERSION=$(ls -d */ | grep -E '^[0-9]+$' | sort -n | tail -n 1 | tr -d '/')
+          # Lấy folder version hiện tại (folder có số lớn nhất, nếu có)
+          if ls -d */ 2>/dev/null | grep -E '^[0-9]+$' >/dev/null; then
+            CURRENT_VERSION=$(ls -d */ | grep -E '^[0-9]+$' | sort -n | tail -n 1 | tr -d '/')
+          else
+            CURRENT_VERSION=0
+          fi
+
+          # Tính toán version mới
           NEW_VERSION=$((CURRENT_VERSION + 1))
 
           # Tạo folder mới với tên version mới
@@ -35,17 +46,19 @@ jobs:
           # Cài đặt các dependency của PHP bằng composer
           composer install
 
-          # Chuyển đến folder node
+          # Chuyển đến folder node và cài đặt các dependency Node.js
           cd node
-
-          # Cài đặt các dependency Node.js bằng yarn
           yarn
 
           # Quay lại thư mục releases
           cd ..
 
-          # Tạo hoặc cập nhật link symbolic 'current' trỏ tới version mới
-          ln -sfn $NEW_VERSION current
+          # Quay lại thư mục cha để tạo hoặc cập nhật link symbolic 'current'
+          cd ..
+          ln -sfn releases/$NEW_VERSION current
+
+          # Quay lại folder releases để xóa các phiên bản cũ
+          cd releases
 
           # Xóa bớt các phiên bản cũ, giữ lại tối đa 5 phiên bản
           ls -d */ | grep -E '^[0-9]+$' | sort -n | head -n -5 | xargs -I {} rm -rf {}
