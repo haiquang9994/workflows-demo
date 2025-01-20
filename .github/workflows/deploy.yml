@@ -43,8 +43,8 @@ jobs:
         #   path: $DEPLOY_WORKSPACE/releases/$NEW_VERSION
         run: |
           pwd
+          echo $DEPLOY_WORKSPACE/$NEW_VERSION
           cd $DEPLOY_WORKSPACE/$NEW_VERSION
-          pwd
           git clone --branch production git@github.com:haiquang9994/workflows-demo.git .
 
       # - name: Setup Application
