@@ -52,6 +52,8 @@ jobs:
           cd ..
 
           # Quay lại thư mục cha để tạo hoặc cập nhật link symbolic 'current'
+          cd ..
+          cd ..
           ln -sfn releases/$NEW_VERSION current
 
           # Quay lại folder releases để xóa các phiên bản cũ
