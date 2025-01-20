@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: self-hosted
+    runs-on: server-1
     steps:
       - name: Setup Environment
         run: |
@@ -39,7 +39,7 @@ jobs:
           echo "DEPLOY_WORKSPACE=$DEPLOY_WORKSPACE" >> $GITHUB_ENV
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
 
-      - name: Checkout Code
+      - name: Clone Code
         run: |
           cd $DEPLOY_WORKSPACE/releases/$NEW_VERSION
           git clone --branch production git@github.com:haiquang9994/workflows-demo.git .
@@ -64,4 +64,4 @@ jobs:
           cd releases
 
           # Xóa bớt các phiên bản cũ, giữ lại tối đa 5 phiên bản
-          ls -d [0-9]* | sort -n | head -n -5 | xargs rm -r
+          ls -d [0-9]* 2>/dev/null | sort -n | head -n -5 | xargs -r rm -r
