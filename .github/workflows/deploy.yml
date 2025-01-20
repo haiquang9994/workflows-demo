@@ -37,10 +37,13 @@ jobs:
           mkdir $NEW_VERSION
 
       - name: Checkout Code
-        uses: actions/checkout@v3
-        with:
-          ref: production
-          path: $DEPLOY_WORKSPACE/releases/$NEW_VERSION
+        # uses: actions/checkout@v3
+        # with:
+        #   ref: production
+        #   path: $DEPLOY_WORKSPACE/releases/$NEW_VERSION
+        run: |
+          cd $DEPLOY_WORKSPACE/$NEW_VERSION
+          git clone --branch production git@github.com:haiquang9994/workflows-demo.git .
 
       - name: Setup Application
         run: |
