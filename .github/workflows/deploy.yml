@@ -49,12 +49,9 @@ jobs:
           # Chuyển đến folder node và cài đặt các dependency Node.js
           cd node
           yarn
-
-          # Quay lại thư mục releases
           cd ..
 
           # Quay lại thư mục cha để tạo hoặc cập nhật link symbolic 'current'
-          cd ..
           ln -sfn releases/$NEW_VERSION current
 
           # Quay lại folder releases để xóa các phiên bản cũ
