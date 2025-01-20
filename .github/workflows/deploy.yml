@@ -42,6 +42,7 @@ jobs:
         #   ref: production
           # path: $DEPLOY_WORKSPACE/releases/$NEW_VERSION
         run: |
+          DEPLOY_WORKSPACE="/home/ubuntu/demo-production"
           echo $DEPLOY_WORKSPACE/$NEW_VERSION
           # cd $DEPLOY_WORKSPACE/$NEW_VERSION
           # git clone --branch production git@github.com:haiquang9994/workflows-demo.git .
