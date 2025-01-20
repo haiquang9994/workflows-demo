@@ -58,5 +58,4 @@ jobs:
           cd releases
 
           # Xóa bớt các phiên bản cũ, giữ lại tối đa 5 phiên bản
-          ls -d */ | grep -E '^[0-9]+$' | sort -n | head -n -5 | xargs -I {} rm -rf {}
-
+          ls -d [0-9]* | sort -n | head -n -5 | xargs rm -r
