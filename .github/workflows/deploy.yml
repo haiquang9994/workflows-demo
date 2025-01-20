@@ -50,6 +50,7 @@ jobs:
           composer install
           cd node
           yarn
+          yarn build
           cd ..
 
           # Copy shared
