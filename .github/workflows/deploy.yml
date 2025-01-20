@@ -12,7 +12,7 @@ jobs:
       - name: Setup Environment
         run: |
           DEPLOY_WORKSPACE="/home/ubuntu/demo-production"
-          cd $DEPLOY_WORKSPACE
+          # cd $DEPLOY_WORKSPACE
 
           # # Kiểm tra và tạo folder releases nếu chưa tồn tại
           # if [ ! -d "releases" ]; then
@@ -36,13 +36,15 @@ jobs:
           # # Tạo folder mới với tên version mới
           # mkdir $NEW_VERSION
 
+          echo "DEPLOY_WORKSPACE=$DEPLOY_WORKSPACE" >> $GITHUB_ENV
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+
       - name: Checkout Code
         # uses: actions/checkout@v3
         # with:
         #   ref: production
           # path: $DEPLOY_WORKSPACE/releases/$NEW_VERSION
         run: |
-          DEPLOY_WORKSPACE="/home/ubuntu/demo-production"
           echo $DEPLOY_WORKSPACE/$NEW_VERSION
           # cd $DEPLOY_WORKSPACE/$NEW_VERSION
           # git clone --branch production git@github.com:haiquang9994/workflows-demo.git .
