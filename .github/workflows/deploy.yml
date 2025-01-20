@@ -52,6 +52,10 @@ jobs:
           yarn
           cd ..
 
+          # Copy shared
+          ln -s ../shared/env .env
+          ln -s ../shared/console.hosts .console.hosts
+
           # Quay lại thư mục cha để tạo hoặc cập nhật link symbolic 'current'
           cd ..
           cd ..
