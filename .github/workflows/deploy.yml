@@ -11,9 +11,42 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+        with:
+          ref: production
 
-      - name: Deploy Code
+      - name: Setup Environment
         run: |
           cd /home/ubuntu/demo-production
-          git pull origin production
+
+          # Chuyển đến folder releases
+          cd releases
+
+          # Lấy folder version hiện tại (folder có số lớn nhất)
+          CURRENT_VERSION=$(ls -d */ | grep -E '^[0-9]+$' | sort -n | tail -n 1 | tr -d '/')
+          NEW_VERSION=$((CURRENT_VERSION + 1))
+
+          # Tạo folder mới với tên version mới
+          mkdir $NEW_VERSION
+          cd $NEW_VERSION
+
+          # Clone branch production vào folder mới
+          git clone --branch production git@github.com:haiquang9994/workflows-demo.git .
+
+          # Cài đặt các dependency của PHP bằng composer
           composer install
+
+          # Chuyển đến folder node
+          cd node
+
+          # Cài đặt các dependency Node.js bằng yarn
+          yarn
+
+          # Quay lại thư mục releases
+          cd ..
+
+          # Tạo hoặc cập nhật link symbolic 'current' trỏ tới version mới
+          ln -sfn $NEW_VERSION current
+
+          # Xóa bớt các phiên bản cũ, giữ lại tối đa 5 phiên bản
+          ls -d */ | grep -E '^[0-9]+$' | sort -n | head -n -5 | xargs -I {} rm -rf {}
+
