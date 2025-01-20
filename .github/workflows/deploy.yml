@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: server-1
+    runs-on: server_1
     steps:
       - name: Setup Environment
         run: |
