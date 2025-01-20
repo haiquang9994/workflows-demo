@@ -42,27 +42,29 @@ jobs:
         #   ref: production
         #   path: $DEPLOY_WORKSPACE/releases/$NEW_VERSION
         run: |
+          pwd
           cd $DEPLOY_WORKSPACE/$NEW_VERSION
+          pwd
           git clone --branch production git@github.com:haiquang9994/workflows-demo.git .
 
-      - name: Setup Application
-        run: |
-          cd $DEPLOY_WORKSPACE/$NEW_VERSION
-          composer install
-          cd node
-          yarn
-          cd ..
+      # - name: Setup Application
+      #   run: |
+      #     cd $DEPLOY_WORKSPACE/$NEW_VERSION
+      #     composer install
+      #     cd node
+      #     yarn
+      #     cd ..
 
-          # Copy shared
-          ln -s $DEPLOY_WORKSPACE/shared/env .env
-          ln -s $DEPLOY_WORKSPACE/shared/console.hosts .console.hosts
+      #     # Copy shared
+      #     ln -s $DEPLOY_WORKSPACE/shared/env .env
+      #     ln -s $DEPLOY_WORKSPACE/shared/console.hosts .console.hosts
 
-          # Quay lại thư mục cha để tạo hoặc cập nhật link symbolic 'current'
-          cd $DEPLOY_WORKSPACE
-          ln -sfn releases/$NEW_VERSION current
+      #     # Quay lại thư mục cha để tạo hoặc cập nhật link symbolic 'current'
+      #     cd $DEPLOY_WORKSPACE
+      #     ln -sfn releases/$NEW_VERSION current
 
-          # Quay lại folder releases để xóa các phiên bản cũ
-          cd releases
+      #     # Quay lại folder releases để xóa các phiên bản cũ
+      #     cd releases
 
-          # Xóa bớt các phiên bản cũ, giữ lại tối đa 5 phiên bản
-          ls -d [0-9]* | sort -n | head -n -5 | xargs rm -r
+      #     # Xóa bớt các phiên bản cũ, giữ lại tối đa 5 phiên bản
+      #     ls -d [0-9]* | sort -n | head -n -5 | xargs rm -r
